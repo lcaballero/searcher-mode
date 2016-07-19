@@ -1,0 +1,8 @@
+* Emacs Major Mode
+  - Python [[http://dustbunnylair.blogspot.com/search/label/emacs][major mode tutorial]].
+  - 
+
+** Example Modes
+   - [[https://github.com/magit/magit][magit]] porcelain over git.
+   - [[https://github.com/dominikh/go-mode.el][go-mode]] full language support.
+   - [[https://github.com/vermiculus/sx.el][sx]] (stack exchange) in emacs.
