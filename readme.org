@@ -27,9 +27,13 @@
    when cond interactive format stringp goto-char cond-case
 
 ** TODO
-- Run Query (global binding: "C-c s" or "C-c f")
+- Run Query
+  - handle empty query string
+  - handle error from server
+  - encode the query as a url component
 - Results view commands:
-  - New Query 'q'
+  - New Query
+	- Run query given a selection text.  Defaulted in the prompt or autorun with that text.
   - Find
 	- Filter down by file extension
 	- Extension exclusions (.tar, .tar.gz, .zip, etc)
@@ -43,6 +47,7 @@
 	- Show size of file kb.
 	- Show match range end (default: true)
 	- Save previous searches
+	- Show the number of files filtered / skipped.
 	- Show Index information (read-only)
 	  - root dir
 	  - elapsed time
@@ -53,3 +58,19 @@
 	  - Perhaps 'H' for all and 'h' for under-cursor
 	- Widen the window vertically (lines) (all | under-cursor)
 	  - Perhaps 'V' for all and 'h' for under-cursor
+
+** Key bindings:
+C-c       Prefix Command
+A         beginning-of-buffer
+a         move-beginning-of-line
+E         end-of-buffer
+e         move-end-of-line
+n         next-line
+p         previous-line
+q         delete-window
+<C-tab>   searcher-toggle-all-lines
+
+C-c C-f   searcher-run-query
+C-c f     searcher-run-query
+C-c C-t   searcher-toggle-all-lines
+C-c t     searcher-toggle-all-lines

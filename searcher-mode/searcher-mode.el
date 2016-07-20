@@ -27,27 +27,40 @@
 	  (hide-lines-matching "^in .*?$")
 	(hide-lines-show-all)))
 
+(defun xplor-searcher (q)
+  (interactive "Mquery:")
+  (message "type of q: %s" (type-of q)))
+
+(defvar searcher-query "")
 
 (defun searcher-run-query (q)
   "Makes an http request using the value provided at the prompt."
   (interactive "Mquery: ")
+  (unhighlight-regexp searcher-query)
+  (setq searcher-query q)
+  (message "type-of q: %s" (type-of searcher-query))
+  (message "current query: %s %s" searcher-query q)
   (with-current-buffer (pop-to-buffer "request demo")
-	(message (buffer-name (current-buffer)))
 	(request
-	 (format "http://127.0.0.1:4000/searching?q=%s" q)
+	 (format "http://127.0.0.1:4000/searching?show-query=on&q=%s" q)
 	 :parser 'buffer-string
-	 :error (function*
-			 (lambda (&key data &allow-other-keys)
-			   (insert data)))
 	 :success (function*
 			   (lambda (&key data &allow-other-keys)
 				 (when data
+				   (message "received data")
 				   (setq buffer-read-only nil)
+				   (message "erasing buffer")
 				   (erase-buffer)
-				   (insert-string data)
+				   (message "inserting data %s" (symbol-name (type-of data)))
+				   (insert data)
+				   (insert (format "Highlighting: %s" searcher-query))
+				   (highlight-regexp (format "%s" searcher-query) font-lock-type-face)
+				   (message "previous-query %s" searcher-query)
 				   (setq buffer-read-only t)
-				   (goto-char (point-max))
-				   ))))))
+				   (goto-char (point-min))
+				   (message "max-point: %d" (point-max))
+				   )))
+	 )))
 
 (defvar searcher-mode-map
   (let ((m (make-keymap)))
@@ -55,18 +68,40 @@
 	(define-key m (kbd "<C-tab>") 'searcher-toggle-all-lines)
 	(define-key m (kbd "C-c C-t") 'searcher-toggle-all-lines)
 	(define-key m (kbd "C-c t") 'searcher-toggle-all-lines)
+	(define-key m (kbd "F") 'searcher-toggle-all-lines)
 	(define-key m (kbd "n") 'next-line)
 	(define-key m (kbd "p") 'previous-line)
 	(define-key m (kbd "a") 'move-beginning-of-line)
 	(define-key m (kbd "A") 'beginning-of-buffer)
 	(define-key m (kbd "e") 'move-end-of-line)
 	(define-key m (kbd "E") 'end-of-buffer)
+	(define-key m (kbd "q") 'delete-window)
+	(define-key m (kbd "S") 'searcher-run-query)
 	(define-key m (kbd "C-c C-f") 'searcher-run-query)
+	(define-key m (kbd "C-c f") 'searcher-run-query)
 	m))
 
 (setq searcher-font-lock-patterns
   '(("^ +[0-9]+ "     . font-lock-function-name-face)
-	(" +[0-9]+:[0-9]+ |" . font-lock-constant-face)))
+	("^in .*$" . font-lock-comment-face)
+	("[0-9]+: ?[0-9]+ |" . font-lock-variable-name-face)
+
+	("^warning .*?" . font-lock-warning-face)
+	("^name .*?" . font-lock-function-name-face)
+	("^variable .*?" . font-lock-variable-name-face)
+	("^keyword .*?" . font-lock-keyword-face)
+	("^comment .*?" . font-lock-comment-face)
+	("^comment_delimiter .*?" . font-lock-comment-delimiter-face)
+	("^type .*?" . font-lock-type-face)
+	("^constant .*?" . font-lock-constant-face)
+	("^builtin .*?" . font-lock-builtin-face)
+	("^preprocessor .*?" . font-lock-preprocessor-face)
+	("^string .*?" . font-lock-string-face)
+	("^doc .*?" . font-lock-doc-face)
+	("^negation-char .*?" . font-lock-negation-char-face)
+ 	)
+)
+
 
 ; https://www.emacswiki.org/emacs/ModeTutorial
 (define-derived-mode searcher-mode nil "searcher"
@@ -81,7 +116,8 @@
   (interactive)
   (if (string= (buffer-name buffer) "request demo")
 	  (with-current-buffer buffer
-		(searcher-mode))))
+		(searcher-mode)
+		)))
 
 (put 'searcher-mode 'mode-class 'special)
 
