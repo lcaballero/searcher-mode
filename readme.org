@@ -1,8 +1,55 @@
-* Emacs Major Mode
+* Research of other Emacs Modes
+  - [[https://github.com/magit/magit][magit]] porcelain over git.
+  - [[https://github.com/dominikh/go-mode.el][go-mode]] full language support.
+  - [[https://github.com/vermiculus/sx.el][sx]] (stack exchange) in emacs.
+  - [[https://tkf.github.io/emacs-request/][emacs-request]] http requests.
+  - Emacs manual [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Major-Mode-Conventions.html][major-mode-conventions]].
   - Python [[http://dustbunnylair.blogspot.com/search/label/emacs][major mode tutorial]].
-  - 
 
-** Example Modes
-   - [[https://github.com/magit/magit][magit]] porcelain over git.
-   - [[https://github.com/dominikh/go-mode.el][go-mode]] full language support.
-   - [[https://github.com/vermiculus/sx.el][sx]] (stack exchange) in emacs.
+** Emacs Questions
+   - [[http://stackoverflow.com/questions/38465076/what-is-the-correct-way-to-show-menu-help-screens-in-emacs][What is the correct way to show / help screens in Emacs?]]
+   - [[http://stackoverflow.com/questions/1449484/emacs-show-help-and-message-buffer-in-current-window-or-in-separate-frame?rq=1][emacs - show help and message buffer in current window or in separate frame?]]
+
+** Elisp functions
+   - same-window-buffer-names
+   - same-window-regexps
+   - same-window-p
+   - special-display-buffer-names
+   - special-display-regexps
+   - special-display-function
+   - display-buffer-function
+
+** Fundamental Elisp
+   defvar defcustom defface defmacro
+   set setq progn let let*
+   eval-when-compile with-current-buffer if unless dolist
+   save-excursion with-silent-modifications cl-assert while
+   when cond interactive format stringp goto-char cond-case
+
+** TODO
+- Run Query (global binding: "C-c s" or "C-c f")
+- Results view commands:
+  - New Query 'q'
+  - Find
+	- Filter down by file extension
+	- Extension exclusions (.tar, .tar.gz, .zip, etc)
+	- Limit files to a specific directory or directories
+	- Case sensitive / insensitive
+  - Output
+	- Show elapsed time
+	- Show file lead (default: "in ")
+	- Show line Number (default: true)
+	- Show match range start (default: true)
+	- Show size of file kb.
+	- Show match range end (default: true)
+	- Save previous searches
+	- Show Index information (read-only)
+	  - root dir
+	  - elapsed time
+	  - files indexed
+	  - file type counts, etc.
+  - Window
+	- Widen the window horizontally (chars) (all | under-cursor)
+	  - Perhaps 'H' for all and 'h' for under-cursor
+	- Widen the window vertically (lines) (all | under-cursor)
+	  - Perhaps 'V' for all and 'h' for under-cursor
